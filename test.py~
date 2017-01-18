@@ -1,0 +1,28 @@
+
+def vref_val(rtt_wr, rtt_park):
+    if rtt_wr == 0:
+        rtt_wr_s = (1024*1024)
+    else:
+        rtt_wr_s = rtt_wr
+    rtt_park_s = (rtt_park == 0) ? (1024*1024): rtt_park
+    dqx_ctl_s = 34
+    Rangepc = 6000
+    Rser_s = 15
+    
+    Vdd = 1200
+    SCALING_FACTOR = 1000
+    
+    Reff_s = ((rtt_wr_s * rtt_park_s) / (rtt_wr_s + rtt_park_s))
+    
+    Vref = (((Rser_s + dqx_ctl_s) * SCALING_FACTOR) / (Rser_s + dqx_ctl_s + Reff_s)) + SCALING_FACTOR;
+    
+    Vref = (Vref * Vdd) / 2 / SCALING_FACTOR;
+    
+    Vrefpc = (Vref * 100 * 100) / Vdd;
+    print "Vrefpc", Vrefpc
+    if (Vrefpc < Rangepc):
+        Vref_range = 1 << 6
+        Rangepc = 4500
+    
+    Vref_value = (Vrefpc - Rangepc)/65
+    print "Vref_value", Vref_value
